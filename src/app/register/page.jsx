@@ -6,7 +6,13 @@ import { useState } from 'react';
 export default function Register (){
     const [data, setData] = useState({
         email: '',
+        fname: '',
+        lname: '',
+        phone: '',
+        city: '',
+        pass: '',
         status: 'initial',
+        user: 'default1'
       });
 
     

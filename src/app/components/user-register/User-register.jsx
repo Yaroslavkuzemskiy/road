@@ -13,12 +13,13 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import PasswordIcon from '@mui/icons-material/Password';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CallIcon from '@mui/icons-material/Call';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import TextField from '@mui/material/TextField';
+import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
+
 
 const TextMaskAdapter = React.forwardRef(function TextMaskAdapter(props, ref) {
     const { onChange, ...other } = props;
@@ -42,8 +43,9 @@ const TextMaskAdapter = React.forwardRef(function TextMaskAdapter(props, ref) {
   };
 
 
-
 export default function UserRegister ({data, setData}){
+
+    const [value, setValue] = React.useState('default1');
 
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -53,23 +55,27 @@ export default function UserRegister ({data, setData}){
       event.preventDefault();
     };
     
-    const [value, setValue] = React.useState('');
+   
     const [show, setShow] = React.useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+       
         setData((current) => ({ ...current, status: 'loading' }));
-        try {
+       
+         try {
           // Replace timeout with real backend operation
           setTimeout(() => {
-            setData({ email: '', status: 'sent' });
+             setData((current) => ({ ...current, status: 'sent' }));
           }, 1500);
         } catch (error) {
           setData((current) => ({ ...current, status: 'failure' }));
         }
+        
       };
 
     return (
+
         <Sheet variant="plain"
             sx={{
                 maxWidth: 600,
@@ -85,129 +91,175 @@ export default function UserRegister ({data, setData}){
             }}
 
         >
+
             <form id="demo" onSubmit={handleSubmit}>
+
                 <FormControl >
                     <FormLabel
                         sx={(theme) => ({
                             '--FormLabel-color': theme.vars.palette.primary.softColor,
                         })}
                     >
-                       Registration
+                        Registration
                     </FormLabel>
                 </FormControl>
+
                 <FormControl required>
                     <FormLabel
                         sx={(theme) => ({
                             '--FormLabel-color': theme.vars.palette.primary.softColor,
                         })}
                     >
-                       all fields are required
+                        all fields are required
                     </FormLabel>
                 </FormControl>
-                    <Stack spacing={2}>
-                        
-                        <Stack direction="row" justifyContent="space-between" >
-                            <Input placeholder="First Name" sx={{width:280}} required/>
-                            <Input placeholder="Last Name" sx={{width: 280}} required/>
-                        </Stack>
+                
 
-                        {show ? <Input
-                            startDecorator={<LocationOnIcon />}
-                            placeholder="City"
-                            required
-                        /> : null }
+                <Stack spacing={2}>
 
-                        <Input
-                            startDecorator={<LocationOnIcon />}
-                            placeholder="City"
-                            required
-                        />
-                       
-                        <Input
-                            startDecorator={<CallIcon />}
-                            value={value}
-                            onChange={(event) => setValue(event.target.value)}
-                            placeholder="(+38060) 000-0000"
-                            slotProps={{ input: { component: TextMaskAdapter } }}
-                            required
-                        />
+                    <ToggleButtonGroup
+                        color="primary"
+                        variant="soft"
+                        value={data.user}
+                        onChange={(event, newValue) => {
+                            // setData(newValue);
+                            setData((current) => ({ ...current, user: newValue }))
+                        }}
+                    >
+                        <Button value="default1" fullWidth>Default</Button>
+                        <Button value="default" fullWidth>New</Button>
 
+
+                    </ToggleButtonGroup>
+
+                    <Stack direction="row" justifyContent="space-between" >
                         <Input
-                            startDecorator={<AlternateEmailIcon />}
-                            sx={{ '--Input-decoratorChildHeight': '45px' }}
-                            placeholder="mail@mui.com"
-                            type="email"
-                            required
-                            value={data.email}
+
+                            value={data.fname}
                             onChange={(event) =>
-                                setData({ email: event.target.value, status: 'initial' })
-                            }
-                            error={data.status === 'failure'}
+                                setData((current) => ({ ...current, fname: event.target.value }))
 
-                        />
-                        {/* <Input
-                            startDecorator={<PasswordIcon />}
-                            type="password"
-                            placeholder="Password"
-                            required
-                            
-                            
-                        />
-                          */}
-                    <OutlinedInput
-                        id="outlined-adornment-password"
+                            }
+                            placeholder="First Name" sx={{ width: 280 }} required />
+
+                        <Input
+                            value={data.lname}
+                            onChange={(event) =>
+                                setData((current) => ({ ...current, lname: event.target.value }))
+
+                            }
+                            placeholder="Last Name" sx={{ width: 280 }} required />
+                    </Stack>
+
+                    {data.user === 'default' ? <Input
+                        startDecorator={<LocationOnIcon />}
+                        placeholder="City111"
+                        required
+                    /> : null}
+
+                    <Input
+                        value={data.city}
+                        onChange={(event) =>
+
+                            setData((current) => ({ ...current, city: event.target.value }))
+                        }
+                        startDecorator={<LocationOnIcon />}
+                        placeholder="City"
+                        required
+                    />
+
+                    <Input
+                        value={data.phone}
+                        onChange={(event) =>
+                            setData((current) => ({ ...current, phone: event.target.value }))
+                        }
+                        startDecorator={<CallIcon />}
+
+
+                        placeholder="(+38060) 000-0000"
+                        slotProps={{ input: { component: TextMaskAdapter } }}
+                        required
+                    />
+
+                    <Input
+
+                        startDecorator={<AlternateEmailIcon />}
+                        sx={{ '--Input-decoratorChildHeight': '45px' }}
+                        placeholder="mail@mui.com"
+                        type="email"
+                        required
+                        value={data.email}
+                        onChange={(event) =>
+                            setData((current) => ({ ...current, email: event.target.value }))
+                        }
+                        error={data.status === 'failure'}
+
+                    />
+
+                    <TextField
+                        value={data.pass}
+                        onChange={(event) =>
+                            setData((current) => ({ ...current, pass: event.target.value }))
+                        }
+                        // id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
                         size="small"
                         required
-                        startAdornment={
-                            <InputAdornment position="start">
-                               <PasswordIcon />
-                            </InputAdornment>
-                        }
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PasswordIcon />
+                                </InputAdornment>
+                            ),
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }}
                         placeholder="Password"
+                        helperText={0 < data.pass.length & data.pass.length <= 5 ? 'password should be more than 5 symbol' : ''}
+                        error={0 < data.pass.length & data.pass.length <= 5}
                     />
 
-                        <Button
-                            variant="solid"
-                            color="primary"
-                            size="md"
-                            loading={data.status === 'loading'}
-                            type="submit"
-                        // sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                        >
-                            Register
-                        </Button>
+                    <Button
+                        disabled={data.pass.length <= 5}
+                        variant="solid"
+                        color="primary"
+                        size="md"
+                        loading={data.status === 'loading'}
+                        type="submit"
+                    // sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                    >
+                        Register
+                    </Button>
 
 
-                    </Stack>
-                    {data.status === 'failure' && (
-                        <FormHelperText
-                            sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
-                        >
-                            Oops! something went wrong, please try again later.
-                        </FormHelperText>
-                    )}
+                </Stack>
+                {data.status === 'failure' && (
+                    <FormHelperText
+                        sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
+                    >
+                        Oops! something went wrong, please try again later.
+                    </FormHelperText>
+                )}
 
-                    {data.status === 'sent' && (
-                        <FormHelperText
-                            sx={(theme) => ({ color: theme.vars.palette.primary[400] })}
-                        >
-                            You are all set!
-                        </FormHelperText>
-                    )}
+                {data.status === 'sent' && (
+                    <FormHelperText
+                        sx={(theme) => ({ color: theme.vars.palette.primary[400] })}
+                    >
+                        You are all set!
+                    </FormHelperText>
+                )}
                 
+
             </form>
         </Sheet>
     )
