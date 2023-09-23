@@ -1,4 +1,5 @@
 
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { IMaskInput } from 'react-imask';
@@ -19,6 +20,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import TextField from '@mui/material/TextField';
 import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
+
+
 
 
 const TextMaskAdapter = React.forwardRef(function TextMaskAdapter(props, ref) {
@@ -50,7 +53,9 @@ export default function UserRegister ({data, setData}){
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-  
+    
+    
+
     const handleMouseDownPassword = (event) => {
       event.preventDefault();
     };
@@ -75,6 +80,8 @@ export default function UserRegister ({data, setData}){
       };
 
     return (
+        
+        
 
         <Sheet variant="plain"
             sx={{
@@ -91,9 +98,13 @@ export default function UserRegister ({data, setData}){
             }}
 
         >
+            {/* <button onClick={redirect('/register?type=fffffff', 'replace')} type="button">gggg</button> */}
+
+
+           
 
             <form id="demo" onSubmit={handleSubmit}>
-
+            
                 <FormControl >
                     <FormLabel
                         sx={(theme) => ({
@@ -261,6 +272,7 @@ export default function UserRegister ({data, setData}){
                 
 
             </form>
+           
         </Sheet>
     )
 }

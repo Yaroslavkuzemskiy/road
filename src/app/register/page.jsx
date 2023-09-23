@@ -17,8 +17,10 @@ export default function Register (){
 
     
     return (
-       
+       <>
         <UserRegister data={data} setData={setData} />
+     
+    </>
        
     )
 }
