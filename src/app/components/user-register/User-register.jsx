@@ -1,5 +1,5 @@
 
-
+import { useRouter } from 'next/navigation'
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { IMaskInput } from 'react-imask';
@@ -19,7 +19,12 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import TextField from '@mui/material/TextField';
-import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
+import Checkbox from '@mui/joy/Checkbox';
+import Divider from '@mui/material/Divider';
+import Link from "next/link"
+import Radio from '@mui/joy/Radio';
+import RadioGroup from '@mui/joy/RadioGroup';
+import Typography from '@mui/joy/Typography';
 
 
 
@@ -48,7 +53,9 @@ const TextMaskAdapter = React.forwardRef(function TextMaskAdapter(props, ref) {
 
 export default function UserRegister ({data, setData}){
 
-    const [value, setValue] = React.useState('default1');
+    const router = useRouter()
+
+    
 
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -63,20 +70,33 @@ export default function UserRegister ({data, setData}){
    
     const [show, setShow] = React.useState(false);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
        
         setData((current) => ({ ...current, status: 'loading' }));
        
          try {
-          // Replace timeout with real backend operation
-          setTimeout(() => {
-             setData((current) => ({ ...current, status: 'sent' }));
-          }, 1500);
+          const response = await fetch('//127.0.0.1/api/register', {
+            method: 'POST',
+            headers: {
+                'Contect-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
+          console.log( response)
+          
+          if(response?.status === 201){
+            console.log( response.status)
+            setData((current) => ({ ...current, status: 'sent' }));
+            router.push('/dashboard')
+          }
+          
+        
         } catch (error) {
           setData((current) => ({ ...current, status: 'failure' }));
         }
         
+      
       };
 
     return (
@@ -98,7 +118,7 @@ export default function UserRegister ({data, setData}){
             }}
 
         >
-            {/* <button onClick={redirect('/register?type=fffffff', 'replace')} type="button">gggg</button> */}
+            {/* <button onClick={redirect('/register?type=fffffff11', 'replace')} type="button">gggg</button> */}
 
 
            
@@ -128,41 +148,104 @@ export default function UserRegister ({data, setData}){
 
                 <Stack spacing={2}>
 
-                    <ToggleButtonGroup
-                        color="primary"
-                        variant="soft"
-                        value={data.user}
-                        onChange={(event, newValue) => {
-                            // setData(newValue);
-                            setData((current) => ({ ...current, user: newValue }))
+                
+                    <RadioGroup
+                        orientation="horizontal"
+                        aria-labelledby="segmented-controls-example"
+                        name="justify"
+                        value={data.role}
+                        onChange={(event) => setData((current) => ({ ...current, role: event.target.value }))}
+                        sx={{
+                            minHeight: 48,
+                            padding: '4px',
+                            borderRadius: '12px',
+                            bgcolor: 'white',
+                            '--RadioGroup-gap': '4px',
+                            '--Radio-actionRadius': '8px',
                         }}
+
+
                     >
-                        <Button value="default1" fullWidth>Default</Button>
-                        <Button value="default" fullWidth>New</Button>
+                        <Radio
+                            // size="lg"
+                            border='1'
+                            key='Carrier'
+                            color="neutral"
+                            value = '1'
+                            disableIcon
+                            label='Carrier'
+                            variant="plain"
+                            sx={{
+                                px: 2,
+                                alignItems: 'center',
+                                width: 300,
+                                
+                            }}
+                            slotProps={{
+                                action: ({ checked }) => ({
+                                    sx: {
+                                        ...(checked && {
+                                            bgcolor: '#97c3f0',
+                                            boxShadow: 'sm',
+                                            '&:hover': {
+                                                bgcolor: '#97c3f0',
+                                            },
+                                        }),
+                                    },
+                                }),
+                            }}
+                        />
+                        <Radio
+                            key='Shipper'
+                            color="neutral"
+                            value='2'
+                            disableIcon
+                            label='Shipper'
+                            variant="plain"
+                            sx={{
+                                px: 2,
+                                alignItems: 'center',
+                                width: 300,
+                            }}
+                            slotProps={{
+                                action: ({ checked }) => ({
+                                    sx: {
+                                        ...(checked && {
+                                            bgcolor: '#97c3f0',
+                                            boxShadow: 'sm',
+                                            '&:hover': {
+                                                bgcolor: '#97c3f0',
+                                            },
+                                        }),
+                                    },
+                                }),
+                            }}
+                        />
 
-
-                    </ToggleButtonGroup>
+                    </RadioGroup>
+                   
+                   
 
                     <Stack direction="row" justifyContent="space-between" >
                         <Input
 
-                            value={data.fname}
+                            value={data.first_name}
                             onChange={(event) =>
-                                setData((current) => ({ ...current, fname: event.target.value }))
+                                setData((current) => ({ ...current, first_name: event.target.value }))
 
                             }
                             placeholder="First Name" sx={{ width: 280 }} required />
 
                         <Input
-                            value={data.lname}
+                            value={data.last_name}
                             onChange={(event) =>
-                                setData((current) => ({ ...current, lname: event.target.value }))
+                                setData((current) => ({ ...current, last_name: event.target.value }))
 
                             }
                             placeholder="Last Name" sx={{ width: 280 }} required />
                     </Stack>
 
-                    {data.user === 'default' ? <Input
+                    {data.role === '2' ? <Input
                         startDecorator={<LocationOnIcon />}
                         placeholder="City111"
                         required
@@ -203,14 +286,14 @@ export default function UserRegister ({data, setData}){
                         onChange={(event) =>
                             setData((current) => ({ ...current, email: event.target.value }))
                         }
-                        error={data.status === 'failure'}
+                        // error={data.status === 'failure'}
 
                     />
 
                     <TextField
-                        value={data.pass}
+                        value={data.password}
                         onChange={(event) =>
-                            setData((current) => ({ ...current, pass: event.target.value }))
+                            setData((current) => ({ ...current, password: event.target.value }))
                         }
                         // id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
@@ -236,25 +319,42 @@ export default function UserRegister ({data, setData}){
                             )
                         }}
                         placeholder="Password"
-                        helperText={0 < data.pass.length & data.pass.length <= 5 ? 'password should be more than 5 symbol' : ''}
-                        error={0 < data.pass.length & data.pass.length <= 5}
+                        helperText={0 < data.password.length & data.password.length <= 5 ? 'password should be more than 5 symbol' : ''}
+                        error={0 < data.password.length & data.password.length <= 5}
                     />
 
-                    <Button
-                        disabled={data.pass.length <= 5}
+                    <FormControl size="sm" sx={{ width: 360 }}>
+                        <Checkbox required
+                            label={
+                                <React.Fragment>
+                                    I have read and agree to the{' '}
+                                    <Typography fontWeight="md">terms and conditions</Typography>.
+                                </React.Fragment>
+                            }
+                        />
+                        <FormHelperText>
+                            <Typography level="body-sm">
+                                Read our <Link href="#link">terms and conditions</Link>.
+                            </Typography>
+                        </FormHelperText>
+                    </FormControl>
+
+                    <Stack>
+                    <Button 
+                        disabled={data.password.length <= 5}
                         variant="solid"
                         color="primary"
                         size="md"
                         loading={data.status === 'loading'}
                         type="submit"
+                        sx={{ mb: 1 }}
                     // sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                     >
+                        
                         Register
                     </Button>
-
-
-                </Stack>
-                {data.status === 'failure' && (
+                    </Stack>
+                    {data.status === 'failure' && (
                     <FormHelperText
                         sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
                     >
@@ -269,6 +369,24 @@ export default function UserRegister ({data, setData}){
                         You are all set!
                     </FormHelperText>
                 )}
+                    <Divider  />
+
+                    <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={2}
+                    >
+                        <p>Already have an account? </p>
+                        
+                        <Link href={{
+                            pathname: '/login',
+
+                        }}>Login</Link>
+                    </Stack>
+
+                </Stack>
+               
                 
 
             </form>

@@ -3,16 +3,18 @@ import UserRegister from '../components/user-register/User-register';
 import { useState } from 'react';
 
 
+
 export default function Register (){
     const [data, setData] = useState({
         email: '',
-        fname: '',
-        lname: '',
+        first_name: '',
+        last_name: '',
         phone: '',
         city: '',
-        pass: '',
+        country: 'ukraine',
+        password: '',
         status: 'initial',
-        user: 'default1'
+        role: 1
       });
 
     

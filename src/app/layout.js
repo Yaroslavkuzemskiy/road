@@ -1,5 +1,5 @@
 import './globals.css'
-
+import AuthProvider from './components/authProvider/authProvider'
 
 
 
@@ -12,12 +12,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body >
+      <AuthProvider>
         <div className='wrapper'>
           <main>
            {children}
           </main>
         
         </div>
+        </AuthProvider>
       </body>
     </html>
   )
