@@ -14,9 +14,9 @@ export default function RootLayout({ children }) {
       <body >
       <AuthProvider>
         <div className='wrapper'>
-          <main>
+          
            {children}
-          </main>
+        
         
         </div>
         </AuthProvider>

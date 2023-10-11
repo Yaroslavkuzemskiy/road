@@ -34,3 +34,6 @@ main {
 .MuiRadio-action {
     border: 0.5px solid #cdd7e1;
 }
+.MuiBox-root li .Mui-selected {
+    background: rgb(84 88 92 / 20%);
+}

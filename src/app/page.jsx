@@ -13,7 +13,7 @@ export default function Home () {
         }
       }}>register</Link>
 
-
+    <Link href="/dashboard">Dashboard</Link>
       </>
   )
 }
